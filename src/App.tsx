@@ -92,6 +92,29 @@ function App() {
       >
         Renew plan
       </button>
+      <button
+        onClick={() => {
+          // @ts-ignore
+          actions.renewPlan({
+            withBeyond: isBeyondSelected,
+          });
+        }}
+      >
+        Renew plan (renewal fail)
+      </button>
+      {isBeyondSelected ? (
+        <button
+          onClick={() => {
+            actions.renewPlan({
+              plan: { planName: '2 year fixed' },
+              withBeyond: isBeyondSelected,
+              success: false,
+            });
+          }}
+        >
+          Renew plan (beyond fail)
+        </button>
+      ) : null}
     </div>
   );
 }

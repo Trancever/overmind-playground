@@ -4,12 +4,16 @@ import { Plan } from '../../types';
 export const renewPlan: AsyncAction<{
   plan: Plan;
   withBeyond: boolean;
-}> = async ({ state, effects, actions }, { plan, withBeyond }) => {
+  success?: boolean;
+}> = async (
+  { state, effects, actions },
+  { plan, withBeyond, success = true },
+) => {
   try {
     await effects.renewPlan(plan);
     state.plan = plan;
     if (withBeyond) {
-      actions.resolveRenewalPlanWithBeyond();
+      actions.resolveRenewalPlanWithBeyond(success);
     } else {
       actions.resolveRenewPlan();
     }
@@ -20,8 +24,11 @@ export const renewPlan: AsyncAction<{
 
 export const resolveRenewPlan: Action = () => {};
 
-export const resolveRenewalPlanWithBeyond: Action = ({ actions }) => {
-  actions.addBeyond(true);
+export const resolveRenewalPlanWithBeyond: Action<boolean> = (
+  { actions },
+  success,
+) => {
+  actions.addBeyond(success);
 };
 
 export const rejectRenewPlan: Action<string> = ({ state }, error) => {
